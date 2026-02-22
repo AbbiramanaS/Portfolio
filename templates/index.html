@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ p.name }} — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ─── TOKENS ────────────────────────────────────────────── */
+    :root {
+      --bg:        #0a0e17;
+      --panel:     #111827;
+      --card:      #1a2234;
+      --border:    rgba(255,255,255,0.07);
+      --accent:    #3b82f6;
+      --accent-lt: rgba(59,130,246,0.12);
+      --green:     #10b981;
+      --green-lt:  rgba(16,185,129,0.12);
+      --amber:     #f59e0b;
+      --text:      #f1f5f9;
+      --sub:       #94a3b8;
+      --muted:     #475569;
+      --max:       1200px;
+      --r:         6px;
+    }
+
+    /* ─── RESET ─────────────────────────────────────────────── */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html  { scroll-behavior:smooth; font-size:16px; }
+    body  {
+      background:var(--bg);
+      color:var(--text);
+      font-family:'Inter', sans-serif;
+      font-weight:400;
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+    }
+    a { color:inherit; text-decoration:none; }
+    ul { list-style:none; }
+    img { display:block; max-width:100%; }
+
+    /* ─── SCROLLBAR ─────────────────────────────────────────── */
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-track { background:var(--bg); }
+    ::-webkit-scrollbar-thumb { background:var(--muted); border-radius:3px; }
+
+    /* ─── NAV ───────────────────────────────────────────────── */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:200;
+      height:60px;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 3rem;
+      background:rgba(10,14,23,0.92);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-brand {
+      font-family:'Playfair Display', serif;
+      font-size:1.1rem;
+      color:var(--text);
+      letter-spacing:0.01em;
+    }
+    .nav-brand span { color:var(--accent); }
+    .nav-menu { display:flex; gap:2rem; align-items:center; }
+    .nav-menu a {
+      font-size:0.8rem;
+      font-weight:500;
+      color:var(--sub);
+      letter-spacing:0.04em;
+      transition:color 0.18s;
+    }
+    .nav-menu a:hover { color:var(--text); }
+
+    /* ─── HERO ──────────────────────────────────────────────── */
+    #hero {
+      min-height:100vh;
+      display:grid;
+      grid-template-columns:1fr 380px;
+      gap:0;
+      padding-top:60px;
+    }
+
+    .hero-left {
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      padding:5rem 4rem 5rem 3rem;
+      border-right:1px solid var(--border);
+    }
+
+    .hero-eyebrow {
+      display:flex;
+      align-items:center;
+      gap:0.6rem;
+      margin-bottom:1.75rem;
+    }
+    .hero-eyebrow-dot {
+      width:8px; height:8px;
+      border-radius:50%;
+      background:var(--green);
+      box-shadow:0 0 8px var(--green);
+      animation:pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; }
+      50%      { opacity:0.4; }
+    }
+    .hero-eyebrow-text {
+      font-size:0.78rem;
+      font-weight:500;
+      color:var(--green);
+      letter-spacing:0.06em;
+    }
+
+    .hero-name {
+      font-family:'Playfair Display', serif;
+      font-size:2.8rem;
+      font-weight:700;
+      line-height:1.15;
+      letter-spacing:-0.01em;
+      color:var(--text);
+      margin-bottom:0.5rem;
+    }
+
+    .hero-title {
+      font-size:0.95rem;
+      font-weight:400;
+      color:var(--sub);
+      margin-bottom:1.75rem;
+    }
+    .hero-title strong {
+      color:var(--accent);
+      font-weight:600;
+    }
+
+    .hero-divider {
+      width:48px;
+      height:2px;
+      background:var(--accent);
+      margin-bottom:1.75rem;
+      border-radius:2px;
+    }
+
+    .hero-bio {
+      font-size:0.9rem;
+      color:var(--sub);
+      line-height:1.8;
+      max-width:520px;
+      margin-bottom:2.5rem;
+    }
+
+    .hero-actions {
+      display:flex;
+      gap:0.85rem;
+      flex-wrap:wrap;
+    }
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      gap:0.4rem;
+      padding:0.65rem 1.4rem;
+      font-family:'Inter', sans-serif;
+      font-size:0.8rem;
+      font-weight:600;
+      border-radius:var(--r);
+      cursor:pointer;
+      border:none;
+      transition:all 0.18s ease;
+      letter-spacing:0.02em;
+    }
+    .btn-solid {
+      background:var(--accent);
+      color:#fff;
+    }
+    .btn-solid:hover { background:#2563eb; transform:translateY(-1px); box-shadow:0 6px 20px rgba(59,130,246,0.3); }
+    .btn-outline {
+      background:transparent;
+      color:var(--sub);
+      border:1px solid var(--border);
+    }
+    .btn-outline:hover { border-color:var(--accent); color:var(--accent); transform:translateY(-1px); }
+
+    /* ── HERO RIGHT PANEL ── */
+    .hero-right {
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      padding:5rem 3rem;
+      gap:1.5rem;
+    }
+
+    .stat-block {
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      padding:1.25rem 1.5rem;
+      display:flex;
+      align-items:center;
+      gap:1.2rem;
+      transition:border-color 0.18s;
+    }
+    .stat-block:hover { border-color:rgba(59,130,246,0.3); }
+    .stat-icon {
+      width:40px; height:40px;
+      border-radius:8px;
+      background:var(--accent-lt);
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.1rem;
+      flex-shrink:0;
+    }
+    .stat-icon.green { background:var(--green-lt); }
+    .stat-icon.amber { background:rgba(245,158,11,0.12); }
+    .stat-num {
+      font-family:'Playfair Display', serif;
+      font-size:1.6rem;
+      font-weight:700;
+      color:var(--text);
+      line-height:1;
+    }
+    .stat-lbl {
+      font-size:0.72rem;
+      color:var(--sub);
+      margin-top:0.2rem;
+      font-weight:500;
+    }
+
+    /* ─── SECTION SHELL ─────────────────────────────────────── */
+    .section {
+      max-width:var(--max);
+      margin:0 auto;
+      padding:5rem 3rem;
+    }
+    .section-head {
+      display:flex;
+      align-items:baseline;
+      gap:1rem;
+      margin-bottom:2.5rem;
+      padding-bottom:1rem;
+      border-bottom:1px solid var(--border);
+    }
+    .section-num {
+      font-size:0.7rem;
+      font-weight:600;
+      color:var(--accent);
+      letter-spacing:0.12em;
+      font-family:'Inter', sans-serif;
+    }
+    .section-ttl {
+      font-family:'Playfair Display', serif;
+      font-size:1.6rem;
+      font-weight:700;
+      color:var(--text);
+      letter-spacing:-0.01em;
+    }
+
+    /* ─── SKILLS ────────────────────────────────────────────── */
+    #skills { background:var(--panel); }
+    .skills-grid {
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:1rem;
+    }
+    .skill-card {
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      padding:1.4rem 1.5rem;
+      transition:border-color 0.18s, transform 0.18s;
+    }
+    .skill-card:hover { border-color:rgba(59,130,246,0.35); transform:translateY(-2px); }
+    .sk-head {
+      display:flex;
+      align-items:center;
+      gap:0.6rem;
+      margin-bottom:1rem;
+    }
+    .sk-icon {
+      width:30px; height:30px;
+      border-radius:6px;
+      background:var(--accent-lt);
+      display:flex; align-items:center; justify-content:center;
+      font-size:0.9rem;
+    }
+    .sk-cat {
+      font-size:0.82rem;
+      font-weight:600;
+      color:var(--text);
+    }
+    .sk-tags { display:flex; flex-wrap:wrap; gap:0.35rem; }
+    .tag {
+      font-size:0.7rem;
+      font-weight:500;
+      color:var(--sub);
+      background:rgba(255,255,255,0.04);
+      border:1px solid var(--border);
+      border-radius:4px;
+      padding:0.2rem 0.55rem;
+    }
+
+    /* ─── EDUCATION ─────────────────────────────────────────── */
+    #education { background:var(--bg); }
+    .edu-list { display:flex; flex-direction:column; gap:1rem; }
+    .edu-card {
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      padding:1.4rem 1.75rem;
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:0.3rem 1.5rem;
+      align-items:start;
+      transition:border-color 0.18s;
+    }
+    .edu-card:hover { border-color:rgba(16,185,129,0.3); }
+    .edu-degree {
+      font-size:0.9rem;
+      font-weight:600;
+      color:var(--text);
+      margin-bottom:0.2rem;
+    }
+    .edu-inst {
+      font-size:0.8rem;
+      color:var(--sub);
+    }
+    .edu-loc {
+      font-size:0.73rem;
+      color:var(--muted);
+      margin-top:0.15rem;
+    }
+    .edu-meta {
+      text-align:right;
+    }
+    .edu-period {
+      font-size:0.73rem;
+      font-weight:600;
+      color:var(--accent);
+      margin-bottom:0.35rem;
+    }
+    .edu-grade {
+      display:inline-block;
+      font-size:0.7rem;
+      font-weight:600;
+      color:var(--green);
+      background:var(--green-lt);
+      border:1px solid rgba(16,185,129,0.25);
+      border-radius:4px;
+      padding:0.15rem 0.55rem;
+    }
+    .edu-board {
+      display:block;
+      font-size:0.68rem;
+      color:var(--muted);
+      margin-top:0.25rem;
+    }
+
+    /* ─── EXPERIENCE ────────────────────────────────────────── */
+    #experience { background:var(--panel); }
+    .exp-list { display:flex; flex-direction:column; gap:1rem; }
+    .exp-card {
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      padding:1.5rem 1.75rem;
+      transition:border-color 0.18s;
+    }
+    .exp-card:hover { border-color:rgba(59,130,246,0.3); }
+    .exp-header {
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:0.5rem 1.5rem;
+      margin-bottom:1rem;
+    }
+    .exp-role {
+      font-size:0.95rem;
+      font-weight:600;
+      color:var(--text);
+    }
+    .exp-company {
+      font-size:0.8rem;
+      color:var(--sub);
+      margin-top:0.15rem;
+    }
+    .exp-right { text-align:right; }
+    .exp-period {
+      font-size:0.73rem;
+      font-weight:600;
+      color:var(--accent);
+      display:block;
+      margin-bottom:0.3rem;
+    }
+    .exp-badge {
+      display:inline-block;
+      font-size:0.65rem;
+      font-weight:600;
+      padding:0.15rem 0.55rem;
+      border-radius:4px;
+      background:var(--accent-lt);
+      color:var(--accent);
+      border:1px solid rgba(59,130,246,0.25);
+    }
+    .exp-badge.current {
+      background:var(--green-lt);
+      color:var(--green);
+      border-color:rgba(16,185,129,0.25);
+    }
+    .exp-points {
+      display:flex; flex-direction:column; gap:0.4rem;
+    }
+    .exp-points li {
+      font-size:0.82rem;
+      color:var(--sub);
+      line-height:1.65;
+      padding-left:1.1rem;
+      position:relative;
+    }
+    .exp-points li::before {
+      content:'';
+      position:absolute;
+      left:0; top:0.55rem;
+      width:5px; height:5px;
+      border-radius:50%;
+      background:var(--accent);
+      opacity:0.7;
+    }
+
+    /* ─── PROJECTS ──────────────────────────────────────────── */
+    #projects { background:var(--bg); }
+    .project-card {
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      padding:2rem 2rem;
+      transition:border-color 0.18s;
+    }
+    .project-card:hover { border-color:rgba(59,130,246,0.3); }
+    .proj-top {
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:1rem;
+      margin-bottom:1rem;
+    }
+    .proj-title {
+      font-family:'Playfair Display', serif;
+      font-size:1.2rem;
+      font-weight:700;
+      color:var(--text);
+    }
+    .proj-pub-badge {
+      flex-shrink:0;
+      font-size:0.68rem;
+      font-weight:600;
+      color:var(--green);
+      background:var(--green-lt);
+      border:1px solid rgba(16,185,129,0.25);
+      border-radius:4px;
+      padding:0.25rem 0.7rem;
+      white-space:nowrap;
+    }
+    .proj-desc {
+      font-size:0.85rem;
+      color:var(--sub);
+      line-height:1.8;
+      margin-bottom:1.1rem;
+    }
+    .proj-cite {
+      font-size:0.78rem;
+      color:var(--accent);
+      border-left:2px solid var(--accent);
+      padding-left:0.8rem;
+      margin-bottom:1.25rem;
+      font-style:italic;
+    }
+    .proj-tools { display:flex; flex-wrap:wrap; gap:0.35rem; }
+
+    /* ─── CERTIFICATIONS ────────────────────────────────────── */
+    #certifications { background:var(--panel); }
+    .certs-grid {
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:0.75rem;
+    }
+    .cert-card {
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      padding:0.9rem 1.25rem;
+      display:flex;
+      align-items:center;
+      gap:0.9rem;
+      transition:border-color 0.18s;
+    }
+    .cert-card:hover { border-color:rgba(59,130,246,0.3); }
+    .cert-dot {
+      width:8px; height:8px;
+      border-radius:50%;
+      background:var(--accent);
+      flex-shrink:0;
+    }
+    .cert-name {
+      font-size:0.8rem;
+      font-weight:500;
+      color:var(--text);
+      line-height:1.3;
+    }
+    .cert-issuer {
+      font-size:0.7rem;
+      color:var(--muted);
+      margin-top:0.1rem;
+    }
+
+    /* ─── CONTACT ───────────────────────────────────────────── */
+    #contact { background:var(--bg); }
+    .contact-layout {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:3rem;
+      align-items:start;
+    }
+    .contact-intro {
+      font-size:0.88rem;
+      color:var(--sub);
+      line-height:1.8;
+      margin-bottom:0;
+    }
+    .contact-list { display:flex; flex-direction:column; gap:0.65rem; }
+    .contact-item {
+      display:flex;
+      align-items:center;
+      gap:0.85rem;
+      padding:0.8rem 1.1rem;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      font-size:0.82rem;
+      color:var(--sub);
+      transition:all 0.18s;
+    }
+    .contact-item:hover {
+      border-color:var(--accent);
+      color:var(--text);
+      transform:translateX(3px);
+    }
+    .contact-item .icon { font-size:1rem; flex-shrink:0; }
+
+    /* ─── FOOTER ────────────────────────────────────────────── */
+    footer {
+      background:var(--panel);
+      border-top:1px solid var(--border);
+      padding:1.5rem 3rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .footer-name {
+      font-family:'Playfair Display', serif;
+      font-size:0.9rem;
+      color:var(--sub);
+    }
+    .footer-note {
+      font-size:0.72rem;
+      color:var(--muted);
+    }
+    .footer-langs {
+      display:flex;
+      gap:0.5rem;
+    }
+    .lang-pill {
+      font-size:0.68rem;
+      font-weight:600;
+      color:var(--sub);
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:0.2rem 0.65rem;
+    }
+
+    /* ─── REVEAL ────────────────────────────────────────────── */
+    .reveal {
+      opacity:0;
+      transform:translateY(18px);
+      transition:opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.in { opacity:1; transform:none; }
+
+    /* ─── RESPONSIVE ────────────────────────────────────────── */
+    @media (max-width:900px) {
+      #hero { grid-template-columns:1fr; }
+      .hero-right { border-top:1px solid var(--border); flex-direction:row; flex-wrap:wrap; padding:2.5rem 2rem; }
+      .stat-block { flex:1 1 160px; }
+      .hero-left { padding:4rem 2rem 3rem; border-right:none; }
+      .skills-grid { grid-template-columns:repeat(2,1fr); }
+      .certs-grid { grid-template-columns:1fr; }
+      .contact-layout { grid-template-columns:1fr; }
+      nav { padding:0 1.5rem; }
+      .section { padding:3.5rem 1.5rem; }
+      footer { flex-direction:column; gap:0.5rem; text-align:center; }
+    }
+    @media (max-width:600px) {
+      .skills-grid { grid-template-columns:1fr; }
+      .hero-name { font-size:2rem; }
+      .nav-menu { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-brand">{{ p.name }}<span>.</span></div>
+  <div class="nav-menu">
+    <a href="#skills">Skills</a>
+    <a href="#education">Education</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#certifications">Certifications</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────── -->
+<section id="hero">
+
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+  
+
+    </div>
+
+    <h1 class="hero-name">{{ p.name }}</h1>
+    <p class="hero-title">
+      Data Analyst &amp; AI Engineer &nbsp;·&nbsp;
+      <strong>Programmer Trainee @ SRM Tech</strong>
+    </p>
+    <div class="hero-divider"></div>
+    <p class="hero-bio">{{ p.bio }}</p>
+
+    <div class="hero-actions">
+      <a href="#contact" class="btn btn-solid">Get in Touch</a>
+      <a href="#projects" class="btn btn-outline">View Projects</a>
+      <a href="https://linkedin.com/in/abbiramanas/" target="_blank" class="btn btn-outline">LinkedIn ↗</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    {% for s in p.stats %}
+    <div class="stat-block">
+      <div class="stat-icon {% if loop.index == 2 %}green{% elif loop.index == 3 %}amber{% endif %}">
+        {% if loop.index == 1 %}🎓
+        {% elif loop.index == 2 %}🏅
+        {% elif loop.index == 3 %}📄
+        {% else %}💼{% endif %}
+      </div>
+      <div>
+        <div class="stat-num">{{ s.number }}</div>
+        <div class="stat-lbl">{{ s.label }}</div>
+      </div>
+    </div>
+    {% endfor %}
+    <div class="stat-block">
+      <div class="stat-icon">📍</div>
+      <div>
+        <div class="stat-num" style="font-size:1rem;margin-top:0.1rem;">Chennai, TN</div>
+        <div class="stat-lbl">Tamil Nadu, India</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ── SKILLS ────────────────────────────────────────────────── -->
+<section id="skills">
+  <div class="section">
+    <div class="section-head reveal">
+      <span class="section-num">01</span>
+      <h2 class="section-ttl">Skills &amp; Technologies</h2>
+    </div>
+    <div class="skills-grid">
+      {% for sk in p.skills %}
+      <div class="skill-card reveal">
+        <div class="sk-head">
+          <div class="sk-icon">{{ sk.icon }}</div>
+          <span class="sk-cat">{{ sk.category }}</span>
+        </div>
+        <div class="sk-tags">
+          {% for t in sk.tags %}<span class="tag">{{ t }}</span>{% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ── EDUCATION ─────────────────────────────────────────────── -->
+<section id="education">
+  <div class="section">
+    <div class="section-head reveal">
+      <span class="section-num">02</span>
+      <h2 class="section-ttl">Education</h2>
+    </div>
+    <div class="edu-list">
+      {% for ed in p.education %}
+      <div class="edu-card reveal">
+        <div>
+          <div class="edu-degree">{{ ed.degree }}</div>
+          <div class="edu-inst">{{ ed.institution }}</div>
+          <div class="edu-loc">📍 {{ ed.location }}</div>
+        </div>
+        <div class="edu-meta">
+          <div class="edu-period">{{ ed.period }}</div>
+          <span class="edu-grade">{{ ed.grade }}</span>
+          {% if ed.board %}<span class="edu-board">{{ ed.board }}</span>{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ── EXPERIENCE ────────────────────────────────────────────── -->
+<section id="experience">
+  <div class="section">
+    <div class="section-head reveal">
+      <span class="section-num">03</span>
+      <h2 class="section-ttl">Experience</h2>
+    </div>
+    <div class="exp-list">
+      {% for ex in p.experience %}
+      <div class="exp-card reveal">
+        <div class="exp-header">
+          <div>
+            <div class="exp-role">{{ ex.role }}</div>
+            <div class="exp-company">{{ ex.company }} &nbsp;·&nbsp; {{ ex.location }}</div>
+          </div>
+          <div class="exp-right">
+            <span class="exp-period">{{ ex.period }}</span>
+            <span class="exp-badge {% if 'Current' in ex.type %}current{% endif %}">{{ ex.type }}</span>
+          </div>
+        </div>
+        <ul class="exp-points">
+          {% for pt in ex.points %}<li>{{ pt }}</li>{% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ── PROJECTS ──────────────────────────────────────────────── -->
+<section id="projects">
+  <div class="section">
+    <div class="section-head reveal">
+      <span class="section-num">04</span>
+      <h2 class="section-ttl">Projects</h2>
+    </div>
+    {% for proj in p.projects %}
+    <div class="project-card reveal">
+      <div class="proj-top">
+        <div class="proj-title">{{ proj.title }}</div>
+        <span class="proj-pub-badge">Published · IJARESM 2025</span>
+      </div>
+      <p class="proj-desc">{{ proj.description }}</p>
+      <p class="proj-cite">{{ proj.publication }}</p>
+      <div class="proj-tools">
+        {% for t in proj.tools %}<span class="tag">{{ t }}</span>{% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ── CERTIFICATIONS ────────────────────────────────────────── -->
+<section id="certifications">
+  <div class="section">
+    <div class="section-head reveal">
+      <span class="section-num">05</span>
+      <h2 class="section-ttl">Certifications</h2>
+    </div>
+    <div class="certs-grid">
+      {% for cert in p.certifications %}
+      <div class="cert-card reveal">
+        <div class="cert-dot"></div>
+        <div>
+          <div class="cert-name">{{ cert.name }}</div>
+          <div class="cert-issuer">{{ cert.issuer }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ───────────────────────────────────────────────── -->
+<section id="contact">
+  <div class="section">
+    <div class="section-head reveal">
+      <span class="section-num">06</span>
+      <h2 class="section-ttl">Contact</h2>
+    </div>
+    <div class="contact-layout">
+      <p class="contact-intro reveal">
+        I am actively seeking roles in Data Science, AI/ML Engineering, and Software Development.
+        Whether you have an opportunity, a collaboration, or just want to connect — feel free to reach out through any of the channels below.
+      </p>
+      <div class="contact-list">
+        <a href="mailto:{{ p.email }}" class="contact-item reveal">
+          <span class="icon">📧</span> {{ p.email }}
+        </a>
+        <a href="{{ p.linkedin }}" target="_blank" class="contact-item reveal">
+          <span class="icon">💼</span> linkedin.com/in/abbiramanas
+        </a>
+        <a href="{{ p.github }}" target="_blank" class="contact-item reveal">
+          <span class="icon">💻</span> github.com/AbbiramanaS
+        </a>
+        <a href="tel:{{ p.phone }}" class="contact-item reveal">
+          <span class="icon">📱</span> {{ p.phone }}
+        </a>
+        <div class="contact-item reveal" style="pointer-events:none;opacity:0.6;">
+          <span class="icon">📍</span> {{ p.location }}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-name">{{ p.name }}</div>
+  <div class="footer-note">Data Analyst · AI Engineer · Programmer Trainee @ SRM Tech &nbsp;·&nbsp; © 2025</div>
+  <div class="footer-langs">
+    {% for l in p.languages %}
+    <span class="lang-pill">{{ l }}</span>
+    {% endfor %}
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('in'), i * 70);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
